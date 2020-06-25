@@ -39,6 +39,8 @@ class Model:
                 log_sigma = tf.Variable(0.0, trainable=False)
             elif model == 'sigma':
                 log_sigma = tf.Variable(0.0, trainable=False)
+            elif model == 'optimal':
+                log_sigma = tf.log(tf.sqrt(tf.reduce_mean((img - img_rec) ** 2, [0, 1, 2, 3], keepdims=True)))
             
             rec_loss = tf.reduce_sum(gaussian_nll(img_rec, log_sigma, img))
             kld_loss = -tf.reduce_sum(0.5 * (1 + z_log_sigma_sq - z_mu ** 2 - tf.exp(z_log_sigma_sq)))
