@@ -19,7 +19,7 @@ batch_norm = partial(slim.batch_norm, scale=True, updates_collections=None)
 
 
 class Model:
-    def __init__(self, img, z_dim, lr):
+    def __init__(self, img, z_dim, lr, model):
         img_shape = img.shape[1:]
         self.z_dim = z_dim
         self.channels = img_shape[2]
@@ -31,8 +31,13 @@ class Model:
         z_mu, z_log_sigma_sq, img_rec = self.enc_dec(img)
         
         # loss
-        rec_loss = tf.losses.mean_squared_error(img, img_rec)
-        kld_loss = -tf.reduce_mean(0.5 * (1 + z_log_sigma_sq - z_mu ** 2 - tf.exp(z_log_sigma_sq)))
+        if model == 'mse':
+            rec_loss = tf.losses.mean_squared_error(img, img_rec)
+            kld_loss = -tf.reduce_mean(0.5 * (1 + z_log_sigma_sq - z_mu ** 2 - tf.exp(z_log_sigma_sq)))
+        else:
+            log_sigma = tf.Variable(0.0, trainable=False)
+            rec_loss = tf.reduce_sum(gaussian_nll(img_rec, log_sigma, img))
+            kld_loss = -tf.reduce_sum(0.5 * (1 + z_log_sigma_sq - z_mu ** 2 - tf.exp(z_log_sigma_sq)))
         
         loss = rec_loss + kld_loss
         
@@ -88,3 +93,7 @@ class Model:
             y = dconv_bn_relu(y, dim * 1, 5, 2)
             img = tf.tanh(dconv(y, self.channels, 5, 2))
             return img
+
+
+def gaussian_nll(mu, log_sigma, x):
+    return 0.5 * ((x - mu) / tf.exp(log_sigma)) ** 2 + log_sigma + 0.5 * np.log(2 * np.pi)

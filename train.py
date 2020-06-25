@@ -18,6 +18,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--epoch', dest='epoch', type=int, default=10)
 parser.add_argument('--batch_size', dest='batch_size', type=int, default=64)
 parser.add_argument('--lr', dest='lr', type=float, default=1e-3, help='learning rate')
+parser.add_argument('--model', type=str, default='mse', help='which model to use: mse or gaussian')
 parser.add_argument('--experiment_name', dest='experiment_name', default='exp')
 args = parser.parse_args()
 
@@ -25,6 +26,7 @@ epoch = args.epoch
 batch_size = args.batch_size
 lr = args.lr
 experiment_name = args.experiment_name
+model = args.model
 z_dim = 20
 
 ## Logging
@@ -44,7 +46,7 @@ img_shape = img.shape[1:]
 
 
 ## Build Graph
-model = Model(img, z_dim, lr)
+model = Model(img, z_dim, lr, model)
 summary, step, img_sample, z_sample, img_rec_sample = model.get_params()
 
 
