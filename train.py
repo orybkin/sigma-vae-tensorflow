@@ -18,7 +18,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--epoch', dest='epoch', type=int, default=10)
 parser.add_argument('--batch_size', dest='batch_size', type=int, default=64)
 parser.add_argument('--lr', dest='lr', type=float, default=1e-3, help='learning rate')
-parser.add_argument('--model', type=str, default='mse', help='which model to use: mse or gaussian')
+parser.add_argument('--model', type=str, default='mse', help='which model to use: mse, gaussian or sigma')
 parser.add_argument('--experiment_name', dest='experiment_name', default='exp')
 args = parser.parse_args()
 
