@@ -9,6 +9,13 @@ This implementation is based on [this](https://github.com/LynnHo/VAE-Tensorflow)
 achieves good results without tuning the heuristic weight beta since the decoder variance balances the objective. 
 It is also very easy to implement, check out individual commits to see the few lines of code you need to add this to your VAE.!
 
+## Installation
+```
+git clone https://github.com/orybkin/sigma-vae-tensorflow.git
+cd sigma-vae-tensorflow/
+pip3 install tensorflow==1.14 numpy argparse scipy wget functools imageio
+```
+
 ## How to run it 
 
 This repo implements several VAE versions.

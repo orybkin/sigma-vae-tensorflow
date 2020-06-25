@@ -1,0 +1,7 @@
+tensorflow==1.14
+numpy
+argparse
+scipy
+wget
+functools
+imageio
