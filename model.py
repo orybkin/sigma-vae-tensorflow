@@ -35,7 +35,11 @@ class Model:
             rec_loss = tf.losses.mean_squared_error(img, img_rec)
             kld_loss = -tf.reduce_mean(0.5 * (1 + z_log_sigma_sq - z_mu ** 2 - tf.exp(z_log_sigma_sq)))
         else:
-            log_sigma = tf.Variable(0.0, trainable=False)
+            if model == 'gaussian':
+                log_sigma = tf.Variable(0.0, trainable=False)
+            elif model == 'sigma':
+                log_sigma = tf.Variable(0.0, trainable=True)
+
             rec_loss = tf.reduce_sum(gaussian_nll(img_rec, log_sigma, img))
             kld_loss = -tf.reduce_sum(0.5 * (1 + z_log_sigma_sq - z_mu ** 2 - tf.exp(z_log_sigma_sq)))
         
